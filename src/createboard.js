@@ -18,13 +18,6 @@ export const gameBoard = (playerName) => ({
     return this._board;
   },
 
-  placeShips(someShip, positions) {
-    for (const i of positions) {
-      this.board[i].ship = someShip.type;
-      this.board[i].stillAlive = true;
-    }
-  },
-
   receiveAttack(position) {
     if (this._board[position].ship === "none") {
       console.log("You missed!");
