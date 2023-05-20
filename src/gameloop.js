@@ -3,24 +3,40 @@ import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
 import { domBoard } from "./domboard.js";
 
-export const gameLoop = () => ({
-  humanPlayer: player(),
+export function gameLoop(){
+  const humanPlayer = player();
+  const computerPlayer = player();
 
-  computerPlayer: player(),
+  const humanBoard =  gameBoard("human");
+  humanBoard.createBoardCoordinates();
+  const computerBoard = gameBoard("computer");
+  computerBoard.createBoardCoordinates();
+  
+  const humanDOMBoard = domBoard("human", humanBoard);
+  const computerDOMBoard = domBoard("computer", computerBoard);
 
-  humanBoard: gameBoard("human"),
+  function startGame() {
+    humanPlayer.isTurn = true;
+    computerPlayer.isComputer = true;
+    humanDOMBoard.displayBoard();
+    computerDOMBoard.displayBoard();
+  }
 
-  computerBoard: gameBoard("computer"),
+  startGame();
 
-  humanDOMBoard: domBoard("human", this.humanBoard),
+  // playRound()
+    // pensei em checar se humanPlayer.isTurn é verdadeiro
+    // se sim, adicionar event listeners nas cells do tabuleiro
+    // do computador. quando o jogador clicar numa cell valida,
+    // tirar todos os event listeners e mudar humanPlayer.isTurn
+    // pra falso  
 
-  computerDOMBoard: domBoard("computer", this.computerBoard),
+  function playRound() {
+    if (humanPlayer.isTurn === true) {
+      computerDOMBoard.placeEventListener(".computer");
+    }
+  }
 
-  startGame() {
-    this.humanPlayer.isTurn(true);
-    this.computerPlayer.isComputer(true);
-    this.humanDOMBoard.displayBoard();
-    this.computerDOMBoard.displayBoard();
-  },
-});
+  playRound();
+}
 

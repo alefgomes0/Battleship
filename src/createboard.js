@@ -11,27 +11,24 @@ export const gameBoard = (playerName) => ({
       }
     }
 
-    sessionStorage.setItem(`${playerName}Board`, JSON.stringify(coordinates));
+    this._board = coordinates;
   },
 
   get board() {
-    return JSON.parse(sessionStorage.getItem(`${playerName}Board`)) || [];
+    return this._board;
   },
 
   placeShips(someShip, positions) {
-    const myBoard = this.board;
     for (const i of positions) {
-      myBoard[i].ship = someShip.type;
-      myBoard[i].stillAlive = true;
+      this.board[i].ship = someShip.type;
+      this.board[i].stillAlive = true;
     }
-
-    sessionStorage.setItem(`${playerName}Board`, JSON.stringify(myBoard));
   },
 
   receiveAttack(position) {
-    if (this.board[position].ship === "none") {
+    if (this._board[position].ship === "none") {
       console.log("You missed!");
-      this.board[position].attacked = true;
+      this._board[position].attacked = true;
     } else {
       console.log("You hit!");
       // usar na instância adequada do navio que foi acertado, pra
@@ -41,12 +38,12 @@ export const gameBoard = (playerName) => ({
   },
 
   checkIfAllSunk() {
-    const myBoard = this.board.filter((cell) => cell.stillAlive === true);
+    const myBoard = this._board.filter((cell) => cell.stillAlive === true);
     if (myBoard.length === 0) return true;
     return false;
   },
 
   cellsNotAttacked() {
-    return this.board.filter(cell => cell.attacked === false);
+    return this._board.filter(cell => cell.attacked === false);
   }
 });
