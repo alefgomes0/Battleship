@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "Anton Regular";
+  src: url("./Assets/Fonts/anton-regular-webfont.woff2") format("woff2"),
+    url("./Assets/Fonts/anton-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Anton Regular", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: rgb(0, 10, 83);
+  background: linear-gradient(
+    37deg,
+    rgba(0, 10, 83, 1) 0%,
+    rgba(0, 19, 84, 1) 25%,
+    rgba(2, 23, 108, 1) 50%,
+    rgba(4, 36, 122, 1) 75%,
+    rgba(12, 30, 141, 1) 100%
+  );
+}
+
+.page-wrapper {
+  display: grid;
+  grid-template-rows: 3fr 9fr;
+  padding: 40px;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: grid;
+  grid-row: 1 / 2;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+}
+
+h1 {
+  color: #e8e8e8;
+  font-size: 90px;
+  letter-spacing: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 2 / 3;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.boards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-row: 2 / 3;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+
+.boards > div:first-of-type {
+  justify-self: end;
+}
+
+.board {
+  display: grid;
+  width: clamp(300px, 400px, 600px);
+  height: clamp(300px, 400px, 600px);;
+}
+
+
+.row {
+  display: flex;
+}
+
+.cell {
+  border: 1px solid #e3e3e3;
+  width: clamp(30px, 40px, 90px);
+  height: clamp(30px, 40px, 90px);
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #020834;
+  transition: 0.15s ease-in-out;
+}
+
+.footer {
+  grid-row: -2 / -1;
+}
