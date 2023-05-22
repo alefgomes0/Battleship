@@ -4,19 +4,19 @@ export const shipSquad = () => ({
   create() {
     const ships = [];
     
-    const carrier = ship('carrier', 5);
+    const carrier = ship('Carrier', 5);
     ships.push(carrier);
 
-    const battleship = ship('battleship', 4);
+    const battleship = ship('Battleship', 4);
     ships.push(battleship);
 
-    const destroyer = ship('destroyer', 3);
+    const destroyer = ship('Destroyer', 3);
     ships.push(destroyer);
 
-    const submarine = ship('submarine', 3);
+    const submarine = ship('Submarine', 3);
     ships.push(submarine);
 
-    const boat = ship('boat', 2);
+    const boat = ship('Boat', 2);
     ships.push(boat);
 
     return ships;

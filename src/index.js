@@ -7,4 +7,6 @@ import { domBoard } from "./domboard.js";
 const board = gameBoard();
 board.createBoardCoordinates();
 const myDOMBoard = domBoard('human', board);
-myDOMBoard.placeShips();
+myDOMBoard.createPlacementUI();
+myDOMBoard.placeShipListeners();
+myDOMBoard.changeShipDirection();

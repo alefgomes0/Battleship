@@ -88,6 +88,7 @@ h1 {
   padding-bottom: 10px;
 }
 
+
 .blurring {
   filter: blur(5px);
   pointer-events: none;
@@ -120,20 +121,30 @@ h1 {
   height: 100%;
 }
 
+.ship-info > h3 {
+  color: #ece7e7;
+  font-size: 24px;
+  margin: 0;
+  padding: 50px 0 0 0;
+  text-decoration: underline;
+  letter-spacing: 0.1rem;
+}
+
+
 .rotate-button {
   border-radius: 10px;
   width: 50%;
   height: 25%;
-  background-color: #C4F10E;
-  color: rgba(0, 10, 83, 1);
+  background-color: #F60919;
+  color: #eae3e3;
   font-weight: 500;
   font-size: 15px;
   cursor: pointer;
 }
 
 .rotate-button:hover {
-  background-color: #9dbf17;
-  color: rgba(12, 30, 141, 1);
+  background-color: #f34450;
+  color: #fff;
 }
 
 .main-content {
@@ -181,6 +192,19 @@ h1 {
   background-color: #020834;
   transition: 0.15s ease-in-out;
 }
+
+.place-ship > .row > .cell:hover {
+  transition: none;
+} 
+
+.row > .highlighted {
+  background-color: red;
+}
+
+.row > .highlighted:hover {
+  background-color: red;
+}
+
 
 .footer {
   grid-row: -2 / -1;
