@@ -93,13 +93,11 @@ export const domBoard = (playerName, someBoard) => ({
       if (e.target.classList.contains('cell')) this.handleCellMouseOver(e.target);
     });
 
-    placementScreen.addEventListener('mouseout', (e) => {
-      if (e.target.classList.contains('cell')) this.handleMouseOut();  
-    });
+    placementScreen.addEventListener('mouseout', this.handleMouseOut);
 
-    /*     placementScreen.addEventListener('click', (e) => {
+    placementScreen.addEventListener('click', (e) => {
       if (e.target.classList.contains('cell')) this.handleCellMouseClick(e.target);
-    }); */  
+    });
   },
 
   placeEventListener(playerName) {
@@ -126,7 +124,6 @@ export const domBoard = (playerName, someBoard) => ({
       }
 
       mySquad[0].direction = 'horizontal';
-      this._squad = mySquad;
       console.log(this.squad[0].direction);
     });  
   },
@@ -136,26 +133,32 @@ export const domBoard = (playerName, someBoard) => ({
     const currentIndex = Number(cell.getAttribute('data-index'));
     const ships = this.squad;
     const currentShip = ships[0];
+    const placedIndexes = [];
     cell.classList.add('highlighted');
 
     if (currentShip.direction === 'horizontal') {
       for (let i = 1; i < currentShip.size; i++) {
-        if (currentIndex + i > 99) return;
+        if (currentIndex + i > 99) return false;
         const nextCell = document.querySelector(`[data-index="${currentIndex + i}"]`);
-        if (!row.contains(nextCell)) return;
+        if (!row.contains(nextCell)) return false;
         nextCell.classList.add('highlighted');
+        placedIndexes.push(currentIndex + i);
+        
       }
 
-      return
+      return placedIndexes;
     }
 
     let offset = 10;
     for (let i = 1; i < currentShip.size; i++) {
-      if (currentIndex + offset > 99) return;
+      if (currentIndex + offset > 99) return false;
       const nextCell = document.querySelector(`[data-index="${currentIndex + offset}"]`);
       nextCell.classList.add('highlighted')
       offset += 10;
+      placedIndexes.push(currentIndex + i);
     }
+
+    return placedIndexes;
   },
 
   handleMouseOut() {
@@ -163,8 +166,15 @@ export const domBoard = (playerName, someBoard) => ({
     cells.forEach((cell) => cell.classList.remove('highlighted'));   
   },
 
-/*   handleCellMouseClick() {
+  handleCellMouseClick(cell) {
+    if (this.handleCellMouseOver(cell) === false) return;
+    console.log(this.squad);
+    const mySquad = this.squad.slice(1);
+    this.squad = mySquad;
+    console.log(this.squad);
 
-  } */
+    const shipName = document.querySelector('.ship-info > h3');
+    shipName.textContent = this.squad[0].type;
+  }
   
 });

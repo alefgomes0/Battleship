@@ -75,6 +75,7 @@ h1 {
   transform: translate(-50%, -50%);
   z-index: 99;
   padding: 20px;
+  background-color: rgb(80, 91, 167);
 }
 
 .placing > h2 {
@@ -135,7 +136,7 @@ h1 {
   border-radius: 10px;
   width: 50%;
   height: 25%;
-  background-color: #F60919;
+  background-color: #ff0011;
   color: #eae3e3;
   font-weight: 500;
   font-size: 15px;
@@ -143,7 +144,7 @@ h1 {
 }
 
 .rotate-button:hover {
-  background-color: #f34450;
+  background-color: #ed5b65;
   color: #fff;
 }
 

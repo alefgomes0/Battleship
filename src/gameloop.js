@@ -32,9 +32,9 @@ export function gameLoop(){
     // pra falso  
 
   function playRound() {
-    if (humanPlayer.isTurn === true) {
-      computerDOMBoard.placeEventListener(".computer");
-    }
+    if (humanPlayer.isTurn !== true) return;
+    computerDOMBoard.placeEventListener(".computer");
+    
   }
 
   playRound();
