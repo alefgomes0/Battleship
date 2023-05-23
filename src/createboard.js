@@ -18,6 +18,19 @@ export const gameBoard = (playerName) => ({
     return this._board;
   },
 
+  set board(newBoard) {
+    this._board = newBoard;
+  },
+
+  updateBoard(shipType, indexes) {
+    const myBoard = this.board;
+    for (const i of indexes) {
+      myBoard[i].ship = shipType;
+    }
+    
+    this.board = myBoard;
+  },
+
   receiveAttack(position) {
     if (this._board[position].ship === "none") {
       console.log("You missed!");

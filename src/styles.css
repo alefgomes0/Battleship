@@ -198,11 +198,13 @@ h1 {
   transition: none;
 } 
 
-.row > .highlighted {
+.row > .highlighted,
+.placed {
   background-color: red;
 }
 
-.row > .highlighted:hover {
+.row > .highlighted:hover,
+.placed {
   background-color: red;
 }
 

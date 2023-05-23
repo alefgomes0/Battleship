@@ -43,7 +43,7 @@ export const domBoard = (playerName, someBoard) => ({
     for (let i = 0; i < 10; i++) {
       const divRow = document.createElement("div");
       divRow.classList.add("row");
-      divRow.setAttribute('data-rowIndex', i);
+      divRow.setAttribute("data-rowIndex", i);
       board.appendChild(divRow);
 
       for (let j = 0; j < 10; j++) {
@@ -59,7 +59,7 @@ export const domBoard = (playerName, someBoard) => ({
 
   createPlacementUI() {
     const body = document.querySelector("body");
-    document.querySelector(".page-wrapper").classList.add('blurring');
+    document.querySelector(".page-wrapper").classList.add("blurring");
 
     const placementScreen = document.createElement("div");
     placementScreen.classList.add("placing");
@@ -76,9 +76,9 @@ export const domBoard = (playerName, someBoard) => ({
     const shipInfo = document.createElement("div");
     shipInfo.classList.add("ship-info");
 
-    const shipName = document.createElement('h3');
+    const shipName = document.createElement("h3");
     shipName.textContent = this.squad[0].type;
-    shipInfo.appendChild(shipName)
+    shipInfo.appendChild(shipName);
     const rotateButton = document.createElement("button");
     rotateButton.classList.add("rotate-button");
     rotateButton.textContent = "Rotate";
@@ -87,16 +87,18 @@ export const domBoard = (playerName, someBoard) => ({
   },
 
   placeShipListeners() {
-    const placementScreen = document.querySelector('.placing');
+    const placementScreen = document.querySelector(".placing");
 
-    placementScreen.addEventListener('mouseover', (e) => {
-      if (e.target.classList.contains('cell')) this.handleCellMouseOver(e.target);
+    placementScreen.addEventListener("mouseover", (e) => {
+      if (e.target.classList.contains("cell"))
+        this.handleCellMouseOver(e.target);
     });
 
-    placementScreen.addEventListener('mouseout', this.handleMouseOut);
+    placementScreen.addEventListener("mouseout", this.handleMouseOut);
 
-    placementScreen.addEventListener('click', (e) => {
-      if (e.target.classList.contains('cell')) this.handleCellMouseClick(e.target);
+    placementScreen.addEventListener("click", (e) => {
+      if (e.target.classList.contains("cell"))
+        this.handleCellMouseClick(e.target);
     });
   },
 
@@ -106,44 +108,43 @@ export const domBoard = (playerName, someBoard) => ({
       if (e.target.classList.contains("cell")) {
         const attackedPosition = e.target.getAttribute("data-index");
         someBoard.receiveAttack(attackedPosition);
-        console.log(someBoard.cellsNotAttacked());
       }
     });
   },
 
   changeShipDirection() {
-    document.querySelector('.rotate-button').addEventListener('click', () => {
+    document.querySelector(".rotate-button").addEventListener("click", () => {
       const mySquad = this.squad;
       console.log(mySquad);
 
-      if (mySquad[0].direction === 'horizontal') {
-        mySquad[0].direction = 'vertical';
-        this._squad = mySquad
-        console.log(this.squad[0].direction);
+      if (mySquad[0].direction === "horizontal") {
+        mySquad[0].direction = "vertical";
+        this._squad = mySquad;
         return;
       }
 
-      mySquad[0].direction = 'horizontal';
-      console.log(this.squad[0].direction);
-    });  
+      mySquad[0].direction = "horizontal";
+    });
   },
 
   handleCellMouseOver(cell) {
     const row = cell.parentElement;
-    const currentIndex = Number(cell.getAttribute('data-index'));
+    const currentIndex = Number(cell.getAttribute("data-index"));
     const ships = this.squad;
     const currentShip = ships[0];
     const placedIndexes = [];
-    cell.classList.add('highlighted');
+    placedIndexes.push(currentIndex);
+    cell.classList.add("highlighted");
 
-    if (currentShip.direction === 'horizontal') {
+    if (currentShip.direction === "horizontal") {
       for (let i = 1; i < currentShip.size; i++) {
         if (currentIndex + i > 99) return false;
-        const nextCell = document.querySelector(`[data-index="${currentIndex + i}"]`);
+        const nextCell = document.querySelector(
+          `[data-index="${currentIndex + i}"]`
+        );
         if (!row.contains(nextCell)) return false;
-        nextCell.classList.add('highlighted');
+        nextCell.classList.add("highlighted");
         placedIndexes.push(currentIndex + i);
-        
       }
 
       return placedIndexes;
@@ -152,29 +153,58 @@ export const domBoard = (playerName, someBoard) => ({
     let offset = 10;
     for (let i = 1; i < currentShip.size; i++) {
       if (currentIndex + offset > 99) return false;
-      const nextCell = document.querySelector(`[data-index="${currentIndex + offset}"]`);
-      nextCell.classList.add('highlighted')
+      const nextCell = document.querySelector(
+        `[data-index="${currentIndex + offset}"]`
+      );
+      nextCell.classList.add("highlighted");
+           placedIndexes.push(currentIndex + offset);
       offset += 10;
-      placedIndexes.push(currentIndex + i);
     }
 
     return placedIndexes;
   },
 
-  handleMouseOut() {
-    const cells = document.querySelectorAll('.highlighted');
-    cells.forEach((cell) => cell.classList.remove('highlighted'));   
+  placeShip(shipIndexes) {
+    for (const i of shipIndexes) {
+      document.querySelector(`[data-index="${i}"]`).classList.add("placed");
+    }
   },
 
-  handleCellMouseClick(cell) {
-    if (this.handleCellMouseOver(cell) === false) return;
-    console.log(this.squad);
+  handleMouseOut() {
+    const cells = document.querySelectorAll(".highlighted");
+    cells.forEach((cell) => cell.classList.remove("highlighted"));
+  },
+
+  handleCellMouseClick(validShip) {
+    const shipIndexes = this.handleCellMouseOver(validShip);
+    if (shipIndexes === false) return;
+
+    someBoard.updateBoard(this.squad[0].type, shipIndexes);
     const mySquad = this.squad.slice(1);
     this.squad = mySquad;
-    console.log(this.squad);
 
-    const shipName = document.querySelector('.ship-info > h3');
-    shipName.textContent = this.squad[0].type;
-  }
+    console.log(this.squad);
+    if (this.squad.length === 0 ) {
+      this.endPlacementPhase();
+      return;
+    }
   
+    const shipName = document.querySelector(".ship-info > h3");
+    shipName.textContent = this.squad[0].type;
+    this.placeShip(shipIndexes);
+  },
+
+  endPlacementPhase() {
+    this.deletePlacementDisplay();
+    this.removeBlur();
+  },
+
+  removeBlur() {
+    document.querySelector('.page-wrapper').classList.remove('blurring');
+  },
+
+  deletePlacementDisplay() {
+    const placementScreen = document.querySelector('.placing');
+    placementScreen.remove();
+  },
 });
