@@ -71,8 +71,6 @@ export const domBoard = (playerName, someBoard) => ({
 
     this.createPlacementBoard();
 
-    console.log(this.squad);
-
     const shipInfo = document.createElement("div");
     shipInfo.classList.add("ship-info");
 
@@ -115,7 +113,6 @@ export const domBoard = (playerName, someBoard) => ({
   changeShipDirection() {
     document.querySelector(".rotate-button").addEventListener("click", () => {
       const mySquad = this.squad;
-      console.log(mySquad);
 
       if (mySquad[0].direction === "horizontal") {
         mySquad[0].direction = "vertical";
@@ -136,12 +133,18 @@ export const domBoard = (playerName, someBoard) => ({
     placedIndexes.push(currentIndex);
     cell.classList.add("highlighted");
 
+    // Provavelmente vou refazer essa parte do programa. Muita repetição
+
     if (currentShip.direction === "horizontal") {
       for (let i = 1; i < currentShip.size; i++) {
         if (currentIndex + i > 99) return false;
-        const nextCell = document.querySelector(
-          `[data-index="${currentIndex + i}"]`
-        );
+        const nextCell = document.querySelector(`.place-ship > .row >
+        [data-index="${currentIndex + i}"]`);
+        if (
+          nextCell.classList.contains("placed") ||
+          cell.classList.contains("placed")
+        )
+          return false;
         if (!row.contains(nextCell)) return false;
         nextCell.classList.add("highlighted");
         placedIndexes.push(currentIndex + i);
@@ -153,11 +156,15 @@ export const domBoard = (playerName, someBoard) => ({
     let offset = 10;
     for (let i = 1; i < currentShip.size; i++) {
       if (currentIndex + offset > 99) return false;
-      const nextCell = document.querySelector(
-        `[data-index="${currentIndex + offset}"]`
-      );
+      const nextCell = document.querySelector(`.place-ship > .row >
+        [data-index="${currentIndex + offset}"]`);
+      if (
+        nextCell.classList.contains("placed") ||
+        cell.classList.contains("placed")
+      )
+        return false;
       nextCell.classList.add("highlighted");
-           placedIndexes.push(currentIndex + offset);
+      placedIndexes.push(currentIndex + offset);
       offset += 10;
     }
 
@@ -166,6 +173,9 @@ export const domBoard = (playerName, someBoard) => ({
 
   placeShip(shipIndexes) {
     for (const i of shipIndexes) {
+      document
+        .querySelector(`.place-ship > .row > [data-index="${i}"]`)
+        .classList.add("placed");
       document.querySelector(`[data-index="${i}"]`).classList.add("placed");
     }
   },
@@ -180,31 +190,23 @@ export const domBoard = (playerName, someBoard) => ({
     if (shipIndexes === false) return;
 
     someBoard.updateBoard(this.squad[0].type, shipIndexes);
+    this.placeShip(shipIndexes);
     const mySquad = this.squad.slice(1);
     this.squad = mySquad;
 
-    console.log(this.squad);
-    if (this.squad.length === 0 ) {
+    if (this.squad.length === 0) {
       this.endPlacementPhase();
       return;
     }
-  
+
     const shipName = document.querySelector(".ship-info > h3");
     shipName.textContent = this.squad[0].type;
-    this.placeShip(shipIndexes);
   },
 
   endPlacementPhase() {
-    this.deletePlacementDisplay();
-    this.removeBlur();
-  },
-
-  removeBlur() {
-    document.querySelector('.page-wrapper').classList.remove('blurring');
-  },
-
-  deletePlacementDisplay() {
-    const placementScreen = document.querySelector('.placing');
-    placementScreen.remove();
+    document.querySelector(".page-wrapper").classList.remove("blurring");
+    document.querySelector(".placing").remove();
+    const boards = document.querySelector(".boards");
+    boards.style.display = "grid";
   },
 });

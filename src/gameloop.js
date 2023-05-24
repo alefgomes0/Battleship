@@ -2,7 +2,7 @@ import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
 import { domBoard } from "./domboard.js";
 
-export function gameLoop() {
+export function createGameLoop() {
   const humanPlayer = player();
   const computerPlayer = player();
 
@@ -16,18 +16,15 @@ export function gameLoop() {
 
   let placementOver = false;
 
-  function placementPhase() {
-    if (placementOver === true) return;
+  function startPlacementPhase() {
     humanDOMBoard.createPlacementUI();
     humanDOMBoard.placeShipListeners();
     humanDOMBoard.changeShipDirection();
   }
 
-  placementPhase();
+  startPlacementPhase();
 
   function startGame() {
-    if (placementOver === false) return;
-    console.log("oiii");
     humanPlayer.isTurn = true;
     computerPlayer.isComputer = true;
     humanDOMBoard.displayBoard();
