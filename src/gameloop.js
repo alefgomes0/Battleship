@@ -1,6 +1,8 @@
 import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
 import { domBoard } from "./domboard.js";
+import {shipSquad} from "./squad.js";
+import {placeComputerShips} from "./computerships.js";
 
 export function createGameLoop() {
   const humanPlayer = player();
@@ -14,8 +16,6 @@ export function createGameLoop() {
   const humanDOMBoard = domBoard("human", humanBoard);
   const computerDOMBoard = domBoard("computer", computerBoard);
 
-  let placementOver = false;
-
   function startPlacementPhase() {
     humanDOMBoard.createPlacementUI();
     humanDOMBoard.placeShipListeners();
@@ -27,8 +27,16 @@ export function createGameLoop() {
   function startGame() {
     humanPlayer.isTurn = true;
     computerPlayer.isComputer = true;
+    const computerSquad = shipSquad().create();
+    const computerShips = placeComputerShips(computerSquad, computerBoard);
+
+    computerShips.idk();
+    computerShips.vsf();
+
+    computerShips.placeShips();
     humanDOMBoard.displayBoard();
     computerDOMBoard.displayBoard();
+    console.log(computerBoard.board);
   }
 
   startGame();
