@@ -1,9 +1,9 @@
 export const ship = (shipType, shipSize) => ({
   type: shipType,
-  
+
   size: shipSize,
 
-  direction: 'horizontal',
+  direction: "horizontal",
 
   hits: 0,
 

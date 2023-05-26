@@ -1,8 +1,8 @@
 import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
 import { domBoard } from "./domboard.js";
-import {shipSquad} from "./squad.js";
-import {placeComputerShips} from "./computerships.js";
+import { shipSquad } from "./squad.js";
+import { placeComputerShips } from "./computerships.js";
 
 export function createGameLoop() {
   const humanPlayer = player();
@@ -29,9 +29,6 @@ export function createGameLoop() {
     computerPlayer.isComputer = true;
     const computerSquad = shipSquad().create();
     const computerShips = placeComputerShips(computerSquad, computerBoard);
-
-    computerShips.idk();
-    computerShips.vsf();
 
     computerShips.placeShips();
     humanDOMBoard.displayBoard();

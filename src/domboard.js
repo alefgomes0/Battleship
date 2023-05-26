@@ -105,9 +105,22 @@ export const domBoard = (playerName, someBoard) => ({
     board.addEventListener("click", (e) => {
       if (e.target.classList.contains("cell")) {
         const attackedPosition = e.target.getAttribute("data-index");
-        someBoard.receiveAttack(attackedPosition);
+        if (someBoard.board[attackedPosition].attacked === true) return
+        const attackStatus = someBoard.receiveAttack(attackedPosition);
+        this.handleAttack(attackedPosition, attackStatus);
       }
     });
+  },
+
+  handleAttack(position, status) {
+    const cell = document.querySelector(`.${playerName} > .row >
+    [data-index="${position}"]`);
+    if (status === "miss") {
+      cell.classList.add("miss");
+    }
+    else {
+      cell.classList.add("hit");
+    }
   },
 
   changeShipDirection() {

@@ -1,3 +1,5 @@
+import { player } from "./player";
+
 export const gameBoard = (playerName) => ({
   createBoardCoordinates() {
     const coordinates = [];
@@ -27,20 +29,15 @@ export const gameBoard = (playerName) => ({
     for (const i of indexes) {
       myBoard[i].ship = shipType;
     }
-    
+
     this.board = myBoard;
   },
 
   receiveAttack(position) {
-    if (this._board[position].ship === "none") {
-      console.log("You missed!");
-      this._board[position].attacked = true;
-    } else {
-      console.log("You hit!");
-      // usar na instância adequada do navio que foi acertado, pra
-      // poder usar "boat.hit()" por exemplo. provavelmente só vou
-      // invocar essa função no "index.js" ou algo assim
-    }
+    this._board[position].attacked = true;
+    if (this._board[position].ship === "none") return "miss";
+
+    return "hit";
   },
 
   checkIfAllSunk() {
@@ -50,6 +47,6 @@ export const gameBoard = (playerName) => ({
   },
 
   cellsNotAttacked() {
-    return this._board.filter(cell => cell.attacked === false);
-  }
+    return this._board.filter((cell) => cell.attacked === false);
+  },
 });
