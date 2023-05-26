@@ -103,12 +103,11 @@ export const domBoard = (playerName, someBoard) => ({
   placeEventListener(playerName) {
     const board = document.querySelector(playerName);
     board.addEventListener("click", (e) => {
-      if (e.target.classList.contains("cell")) {
-        const attackedPosition = e.target.getAttribute("data-index");
-        if (someBoard.board[attackedPosition].attacked === true) return
-        const attackStatus = someBoard.receiveAttack(attackedPosition);
-        this.handleAttack(attackedPosition, attackStatus);
-      }
+      const attackedPosition = e.target.getAttribute("data-index");
+      if (!e.target.classList.contains("cell")) return;
+      if (someBoard.board[attackedPosition].attacked === true) return;
+      const attackStatus = someBoard.receiveAttack(attackedPosition);
+      this.handleAttack(attackedPosition, attackStatus);
     });
   },
 
@@ -117,8 +116,7 @@ export const domBoard = (playerName, someBoard) => ({
     [data-index="${position}"]`);
     if (status === "miss") {
       cell.classList.add("miss");
-    }
-    else {
+    } else {
       cell.classList.add("hit");
     }
   },

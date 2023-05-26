@@ -1,7 +1,8 @@
 import './styles.css'
-import {createGameLoop} from './gameloop.js';
+import {game} from './gameloop.js';
 import { gameBoard } from "./createboard.js";
 import { domBoard } from "./domboard.js";
 
 
-createGameLoop();
+const gameStart = game();
+gameStart.createGameLoop();

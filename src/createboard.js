@@ -45,8 +45,4 @@ export const gameBoard = (playerName) => ({
     if (myBoard.length === 0) return true;
     return false;
   },
-
-  cellsNotAttacked() {
-    return this._board.filter((cell) => cell.attacked === false);
-  },
 });

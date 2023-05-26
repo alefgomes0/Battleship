@@ -3,52 +3,64 @@ import { player } from "./player.js";
 import { domBoard } from "./domboard.js";
 import { shipSquad } from "./squad.js";
 import { placeComputerShips } from "./computerships.js";
+import { computerAttack } from "./computerattack.js";
 
-export function createGameLoop() {
-  const humanPlayer = player();
-  const computerPlayer = player();
+export const game = () => ({
+  humanPlayer: null,
+  computerPlayer: null,
+  humanBoard: null,
+  computerBoard: null,
+  humanDOMBoard: null,
+  computerDOMBoard: null,
+  computerPlay: null,
 
-  const humanBoard = gameBoard("human");
-  humanBoard.createBoardCoordinates();
-  const computerBoard = gameBoard("computer");
-  computerBoard.createBoardCoordinates();
+  createGameLoop() {
+    this.humanPlayer = player();
+    this.computerPlayer = player();
+    this.humanBoard = gameBoard("human");
+    this.humanBoard.createBoardCoordinates();
+    this.computerBoard = gameBoard("computer");
+    this.computerBoard.createBoardCoordinates();
+    this.humanDOMBoard = domBoard("human", this.humanBoard);
+    this.computerDOMBoard = domBoard("computer", this.computerBoard);
+    this.computerPlay = computerAttack(this.humanBoard);
+    this.computerPlay.checkAvailableCells();
 
-  const humanDOMBoard = domBoard("human", humanBoard);
-  const computerDOMBoard = domBoard("computer", computerBoard);
+    this.startPlacementPhase();
+    this.startGame();
+    this.humanRound();
+  },
 
-  function startPlacementPhase() {
-    humanDOMBoard.createPlacementUI();
-    humanDOMBoard.placeShipListeners();
-    humanDOMBoard.changeShipDirection();
-  }
+  startPlacementPhase() {
+    this.humanDOMBoard.createPlacementUI();
+    this.humanDOMBoard.placeShipListeners();
+    this.humanDOMBoard.changeShipDirection();
+  },
 
-  startPlacementPhase();
-
-  function startGame() {
-    humanPlayer.isTurn = true;
-    computerPlayer.isComputer = true;
+  startGame() {
+    this.humanPlayer.isTurn = true;
+    this.computerPlayer.isComputer = true;
     const computerSquad = shipSquad().create();
-    const computerShips = placeComputerShips(computerSquad, computerBoard);
+    const computerShips = placeComputerShips(computerSquad, this.computerBoard);
 
     computerShips.placeShips();
-    humanDOMBoard.displayBoard();
-    computerDOMBoard.displayBoard();
-    console.log(computerBoard.board);
-  }
+    this.humanDOMBoard.displayBoard();
+    this.computerDOMBoard.displayBoard();
+  },
 
-  startGame();
+  humanRound() {
+    this.computerDOMBoard.placeEventListener(".computer");
+    this.humanPlayer.isTurn = false;
+  },
 
-  // playRound()
-  // pensei em checar se humanPlayer.isTurn é verdadeiro
-  // se sim, adicionar event listeners nas cells do tabuleiro
-  // do computador. quando o jogador clicar numa cell valida,
-  // tirar todos os event listeners e mudar humanPlayer.isTurn
-  // pra falso
-
-  function playRound() {
-    if (humanPlayer.isTurn !== true) return;
-    computerDOMBoard.placeEventListener(".computer");
-  }
-
-  playRound();
-}
+  computerRound() {
+    const cellNumber = this.computerPlay.random();
+    const attackedCell = document.querySelector(
+      `.human > .row > [data-index="${cellNumber}"]`
+    );
+    this.humanDOMBoard.placeEventListener(".human");
+    attackedCell.click();
+    this.humanPlayer.isTurn = true;
+    this.humanRound();
+  },
+});
