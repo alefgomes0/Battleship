@@ -17,9 +17,9 @@ export const game = () => ({
   createGameLoop() {
     this.humanPlayer = player();
     this.computerPlayer = player();
-    this.humanBoard = gameBoard("human");
+    this.humanBoard = gameBoard(shipSquad().create());
     this.humanBoard.createBoardCoordinates();
-    this.computerBoard = gameBoard("computer");
+    this.computerBoard = gameBoard(shipSquad().create());
     this.computerBoard.createBoardCoordinates();
     this.humanDOMBoard = domBoard("human", this.humanBoard);
     this.computerDOMBoard = domBoard("computer", this.computerBoard);
@@ -40,8 +40,7 @@ export const game = () => ({
   startGame() {
     this.humanPlayer.isTurn = true;
     this.computerPlayer.isComputer = true;
-    const computerSquad = shipSquad().create();
-    const computerShips = placeComputerShips(computerSquad, this.computerBoard);
+    const computerShips = placeComputerShips(shipSquad().create(), this.computerBoard);
 
     computerShips.placeShips();
     this.humanDOMBoard.displayBoard();

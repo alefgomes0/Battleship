@@ -161,12 +161,21 @@ h1 {
 .boards {
   display: none;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr auto;
   grid-row: 2 / 3;
   grid-column: 1 / -1;
   align-items: center;
+  justify-items: center;
   justify-content: center;
   gap: 60px;
+}
+
+.board-label {
+  grid-row: -2 / -1;
+  color: #e3e3e3;
+  font-size: 18px;
+  letter-spacing: 0.1rem;
+  text-align: center;
 }
 
 .boards > div:first-of-type {
