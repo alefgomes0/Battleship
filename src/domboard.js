@@ -13,9 +13,13 @@ export const domBoard = (playerName, someBoard) => ({
 
   displayBoard() {
     const boards = document.querySelector(".boards");
+    const boardContainer = document.createElement("div");
+    boardContainer.classList.add("board-container");
     const board = document.createElement("div");
     board.classList.add("board", `${playerName}`);
-    boards.appendChild(board);
+    boardContainer.appendChild(board);
+    boardContainer.appendChild(this.labelBoard());
+    boards.appendChild(boardContainer);
 
     let indexAdjust = 0;
 
@@ -32,6 +36,18 @@ export const domBoard = (playerName, someBoard) => ({
 
       indexAdjust += 10;
     }
+  },
+
+  labelBoard() {
+    const h5 = document.createElement("h5");
+    h5.classList.add("board-label");
+    if (playerName === "human") {
+      h5.textContent = "Your Board";
+      return h5;
+    }
+
+    h5.textContent = "Opponent's Board";
+    return h5;
   },
 
   createPlacementBoard() {
