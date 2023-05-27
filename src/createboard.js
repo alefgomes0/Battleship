@@ -1,6 +1,4 @@
-import { player } from "./player";
-
-export const gameBoard = (playerName) => ({
+export const gameBoard = () => ({
   createBoardCoordinates() {
     const coordinates = [];
     for (let i = 0; i < 10; i++) {

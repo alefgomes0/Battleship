@@ -1,6 +1,6 @@
 import { shipSquad } from "./squad.js";
 
-export const domBoard = (playerName, someBoard) => ({
+export const domBoard = (playerName, someBoard, vsf) => ({
   _squad: shipSquad().create(),
 
   get squad() {
@@ -13,9 +13,13 @@ export const domBoard = (playerName, someBoard) => ({
 
   displayBoard() {
     const boards = document.querySelector(".boards");
+    const boardContainer = document.createElement("div");
+    boardContainer.classList.add("board-container");
     const board = document.createElement("div");
     board.classList.add("board", `${playerName}`);
-    boards.appendChild(board);
+    boardContainer.appendChild(board);
+    boardContainer.appendChild(this.labelBoard());
+    boards.appendChild(boardContainer);
 
     let indexAdjust = 0;
 
@@ -32,6 +36,18 @@ export const domBoard = (playerName, someBoard) => ({
 
       indexAdjust += 10;
     }
+  },
+
+  labelBoard() {
+    const h5 = document.createElement("h5");
+    h5.classList.add("board-label");
+    if (playerName === "human") {
+      h5.textContent = "Your Board";
+      return h5;
+    }
+
+    h5.textContent = "Opponent's Board";
+    return h5;
   },
 
   createPlacementBoard() {
@@ -109,6 +125,15 @@ export const domBoard = (playerName, someBoard) => ({
       const attackStatus = someBoard.receiveAttack(attackedPosition);
       this.handleAttack(attackedPosition, attackStatus);
     });
+  },
+
+  checkIfValid(element) {
+    const attackedPosition = element.target.getAttribute("data-index");
+    if (!element.target.classList.contains("cell")) return;
+    if (someBoard.board[attackedPosition].attacked === true) return;
+    const attackStatus = someBoard.receiveAttack(attackedPosition);
+    this.handleAttack(attackedPosition, attackStatus);
+    return true;
   },
 
   handleAttack(position, status) {

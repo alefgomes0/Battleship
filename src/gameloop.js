@@ -1,11 +1,9 @@
-import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
-import { domBoard } from "./domboard.js";
 import { shipSquad } from "./squad.js";
 import { placeComputerShips } from "./computerships.js";
 import { computerAttack } from "./computerattack.js";
 
-export const game = () => ({
+export const game = (humanBoard, computerBoard, humanDOMBoard, computerDOMBoard) => ({
   humanPlayer: null,
   computerPlayer: null,
   humanBoard: null,
@@ -17,18 +15,15 @@ export const game = () => ({
   createGameLoop() {
     this.humanPlayer = player();
     this.computerPlayer = player();
-    this.humanBoard = gameBoard("human");
-    this.humanBoard.createBoardCoordinates();
-    this.computerBoard = gameBoard("computer");
-    this.computerBoard.createBoardCoordinates();
-    this.humanDOMBoard = domBoard("human", this.humanBoard);
-    this.computerDOMBoard = domBoard("computer", this.computerBoard);
+    this.humanBoard = humanBoard;
+    this.computerBoard = computerBoard;
+    this.humanDOMBoard = humanDOMBoard;
+    this.computerDOMBoard = computerDOMBoard;
     this.computerPlay = computerAttack(this.humanBoard);
     this.computerPlay.checkAvailableCells();
 
     this.startPlacementPhase();
     this.startGame();
-    this.humanRound();
   },
 
   startPlacementPhase() {
@@ -50,7 +45,6 @@ export const game = () => ({
 
   humanRound() {
     this.computerDOMBoard.placeEventListener(".computer");
-    this.humanPlayer.isTurn = false;
   },
 
   computerRound() {
