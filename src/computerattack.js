@@ -24,7 +24,6 @@ export const computerAttack = (opponentBoard) => ({
     const randomIndex = Math.floor(Math.random() * cells.length);
     cells.splice(randomIndex, 1);
     this.availableCells = cells;
-    console.log(this.availableCells);
 
     return randomIndex;
   },
