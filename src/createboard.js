@@ -67,7 +67,6 @@ export const gameBoard = (playerShips) => ({
 
   checkIfAllSunk() {
     const myShips = this.ships.filter((ship) => ship.isSunk() === false)
-    console.log(myShips)
     
     if (myShips.length === 0) console.log("CABOOOOU");
     return false;
