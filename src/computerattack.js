@@ -37,22 +37,21 @@ export const computerAttack = (opponentBoard) => ({
     }
   },
 
-  random() {
+  attack() {
     let index;
+    if (this.recentHit === true) {
+      index = this.smart()
+    }
+
+    index = this.random();
+    return index;
+  },
+
+  random() {
     const cells = this.availableCells;
-
-/*     if (this.recentHit === true) {
-      index = this.findIndex(this.cellsToTry);
-    } */
-
- 
-    index = Math.floor(Math.random() * cells.length);
-    
-
+    const index = Math.floor(Math.random() * cells.length);
     cells.splice(index, 1);
     this.availableCells = cells;
-
-    // this.smart(index);
     return index;
   },
 

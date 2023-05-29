@@ -244,6 +244,39 @@ h1 {
   background-color: red;
 }
 
+.game-over {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  color: #e3e3e3;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 3px solid red;
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  padding: 20px;
+  background-color: rgb(80, 91, 167);
+}
+
+.close-window {
+  width: 75%;
+  height: 25%;
+  background-color: red;
+  color: #e3e3e3;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.close-window:hover {
+  background-color: #e81212;
+  color: #fff;
+}
+
 
 .footer {
   grid-row: -2 / -1;

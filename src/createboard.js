@@ -58,15 +58,12 @@ export const gameBoard = (playerShips) => ({
     const updatedShips = this.ships;
     const shipIndex = updatedShips.findIndex((ship) => ship.type === shipName)
     updatedShips[shipIndex].hit();
-
     this.ships = updatedShips;
-    this.checkIfAllSunk();
   },
 
   checkIfAllSunk() {
-    const myShips = this.ships.filter((ship) => ship.isSunk() === false)
-    
-    if (myShips.length === 0) console.log("CABOOOOU");
+    const myShips = this.ships.filter((ship) => ship.isSunk() === false) 
+    if (myShips.length === 0) return true;
     return false;
   },
 

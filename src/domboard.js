@@ -124,9 +124,9 @@ export const domBoard = (playerName, someBoard, player) => ({
       if (someBoard.board[attackedPosition].attacked === true) return;
       if (player.isTurn === false && playerName === ".human") return;
       const attackStatus = someBoard.receiveAttack(attackedPosition);
-      
-      this.handleAttack(attackedPosition, attackStatus);
 
+      this.handleAttack(attackedPosition, attackStatus);
+      if (someBoard.checkIfAllSunk() === true) this.finishGame(); 
     });
   },
 
@@ -239,4 +239,32 @@ export const domBoard = (playerName, someBoard, player) => ({
     const boards = document.querySelector(".boards");
     boards.style.display = "grid";
   },
+
+  finishGame() {
+    const finishScreen = document.createElement("div");
+    finishScreen.classList.add("game-over");
+    document.querySelector("body").appendChild(finishScreen);
+    document.querySelector(".page-wrapper").classList.add("blurring");
+    const phrase = document.createElement("h3");
+    finishScreen.appendChild(phrase);
+
+    if (playerName === "human") {
+      phrase.textContent = "You lost the game!";
+    }
+
+    phrase.textContent = "You won the game!";
+
+    const closeWindow = document.createElement("button");
+    closeWindow.classList.add("close-window");
+    closeWindow.textContent = "Close";
+    finishScreen.appendChild(closeWindow);
+    this.closeButton();
+  },
+
+  closeButton() {
+    document.querySelector(".close-window").addEventListener("click", () => {
+      document.querySelector(".page-wrapper").classList.remove("blurring");
+      document.querySelector(".game-over").remove();
+    });
+  }
 });
