@@ -6,6 +6,8 @@ const gameStart = game();
 gameStart.createGameLoop();
 
 const computerBoard = document.querySelector(".computer");
-computerBoard.addEventListener("click",() => {
+computerBoard.addEventListener("click",(e) => {
+  if (e.target.classList.contains("attacked")) return;
   gameStart.computerRound();
+  e.target.classList.add("attacked");
 });

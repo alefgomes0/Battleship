@@ -108,7 +108,7 @@ export const domBoard = (playerName, someBoard) => ({
         this.handleCellMouseOver(e.target);
     });
 
-    placementScreen.addEventListener("mouseout", this.handleMouseOut);
+    placementScreen.addEventListener("mouseout", this.handleCellMouseOut);
 
     placementScreen.addEventListener("click", (e) => {
       if (e.target.classList.contains("cell"))
@@ -119,11 +119,13 @@ export const domBoard = (playerName, someBoard) => ({
   placeEventListener(playerName) {
     const board = document.querySelector(playerName);
     board.addEventListener("click", (e) => {
-      const attackedPosition = e.target.getAttribute("data-index");
+      const attackedPosition = Number(e.target.getAttribute("data-index"));
       if (!e.target.classList.contains("cell")) return;
       if (someBoard.board[attackedPosition].attacked === true) return;
       const attackStatus = someBoard.receiveAttack(attackedPosition);
+      
       this.handleAttack(attackedPosition, attackStatus);
+
     });
   },
 
@@ -207,7 +209,7 @@ export const domBoard = (playerName, someBoard) => ({
     }
   },
 
-  handleMouseOut() {
+  handleCellMouseOut() {
     const cells = document.querySelectorAll(".highlighted");
     cells.forEach((cell) => cell.classList.remove("highlighted"));
   },

@@ -57,9 +57,7 @@ export const gameBoard = (playerShips) => ({
   attackShip(shipName) {
     const updatedShips = this.ships;
     const shipIndex = updatedShips.findIndex((ship) => ship.type === shipName)
-    console.log(updatedShips[shipIndex].hits);
     updatedShips[shipIndex].hit();
-    console.log(updatedShips[shipIndex].isSunk(),)
 
     this.ships = updatedShips;
     this.checkIfAllSunk();

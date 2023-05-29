@@ -21,7 +21,12 @@ export const computerAttack = (opponentBoard) => ({
 
   recentHit: false,
 
-  cellsToTry: [],
+  cellsToTry: [
+    {"direction":"left", "index":"none", "hitLast":true},
+    {"direction":"right", "index":"none", "hitLast":true},
+    {"direction":"up", "index":"none", "hitLast":true},
+    {"direction":"down", "index":"none", "hitLast":true}
+  ],
 
   roundsWithoutHits: 99,
 
@@ -36,29 +41,36 @@ export const computerAttack = (opponentBoard) => ({
     let index;
     const cells = this.availableCells;
 
-    if (this.recentHit === true) {
+/*     if (this.recentHit === true) {
       index = this.findIndex(this.cellsToTry);
-    }
-    else {
+    } */
+
+ 
     index = Math.floor(Math.random() * cells.length);
-    }
+    
 
     cells.splice(index, 1);
     this.availableCells = cells;
 
-    this.smart(index);
+    // this.smart(index);
     return index;
   },
 
-  smart(index) {
+/*   smart(index) {
     index = Number(index);
-    if (opponentBoard.board[index].ship !== "none") {
+    if (this.recentHit === false && opponentBoard.board[index].ship !== "none") {
       this.recentHit = true;
       this.roundsWithoutHits = 0;
 
-      let testCells = [index - 1, index + 1, index - 10, index + 10];
-      testCells = this.validateCells(testCells);
+      const next = this.defineNextTarget(index);
+      this.cellsToTry = next;
+    }
+
+    else if (this.recentHit === true && opponentBoard.board[index].ship !== "none") {
+      let testCells = this.cellsToTry
+      testCells[0] = testCells[0] - 1;
       this.cellsToTry = testCells;
+      console.log(this.cellsToTry);
     }
 
     if (this.recentHit === true && opponentBoard.board[index].ship === "none") {
@@ -70,6 +82,20 @@ export const computerAttack = (opponentBoard) => ({
     }
   },
 
+  defineNextTarget(cellIndex) {
+    let testCells = [cellIndex - 1, cellIndex + 1, cellIndex - 10, cellIndex + 10];
+    testCells = this.validateCells(testCells);
+
+    let nextTargets = this.cellsToTry;
+    let counter = 0;
+    for (const i of testCells) {
+      nextTargets[counter].index = i;
+      counter++;
+    }
+
+    this.cellsToTry = nextTargets;
+  },
+
   validateCells(list) {
     const newList = [];
     for (const i of list) {
@@ -77,9 +103,10 @@ export const computerAttack = (opponentBoard) => ({
       newList.push(i);
     }
 
+    console.log(newList);
     return newList;
 
     // arrumar um jeito de tirar as celulas que não estejam disponiveis
     // no this.availableCells
-  }
+  } */
 });
