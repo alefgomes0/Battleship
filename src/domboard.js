@@ -163,7 +163,6 @@ export const domBoard = (playerName, someBoard, player) => ({
     placedIndexes.push(currentIndex);
     cell.classList.add("highlighted");
 
-    // Provavelmente vou refazer essa parte do programa. Muita repetição
 
     if (currentShip.direction === "horizontal") {
       for (let i = 1; i < currentShip.size; i++) {

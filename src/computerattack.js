@@ -2,6 +2,7 @@ export const computerAttack = (opponentBoard) => ({
   checkAvailableCells() {
     const notAttacked = [];
     let counter = 0;
+
     for (const s of opponentBoard.board) {
       if (s.attacked === true) continue;
       notAttacked.push(counter);
@@ -32,19 +33,16 @@ export const computerAttack = (opponentBoard) => ({
     if (this.roundsWithoutHits >= 4) this.recentHit = false;
   },
 
-  findIndex(nextGuesses) {
-    for (let i = 0; i < nextGuesses.length; i++) {
-      const cell = this.availableCells.filter((cell) => cell === nextGuesses[i]);
-      if (cell !== -1) return cell;
-    }
+  findIndex(nextGuess) {
+    const cells = this.availableCells;
+    return cells.findIndex((cell) => cell === nextGuess)
   },
 
   attack() {
     let attackedCell;
     if (this.recentHit === true) {
-      attackedCell = this.smart()
-    }
-    else attackedCell = this.random();
+      attackedCell = this.smart();
+    } else attackedCell = this.random();
 
     this.checkHit(attackedCell);
     const cells = this.availableCells;
@@ -58,17 +56,16 @@ export const computerAttack = (opponentBoard) => ({
     if (opponentBoard.board[someIndex].ship === "none") {
       this.recentHit = false;
       this.checkMiss();
-    }
-    else {
+    } else {
       this.recentHit = true;
       this.recentHitIndex = someIndex;
       this.roundsWithoutHits = 0;
-    } 
+    }
   },
 
   random() {
     const cells = this.availableCells;
-    const index = Math.floor(Math.random() * cells.length);
+    const index = this.randomize(cells);
     return cells[index];
   },
 
@@ -79,13 +76,17 @@ export const computerAttack = (opponentBoard) => ({
     const nextTargets = this.validateCells(testCells);
 
     if (nextTargets.length > 0) {
-      const smartAttack = Math.floor(Math.random() * nextTargets.length);
+      this.cellsToAttack = nextTargets;
+      const smartAttack = this.randomize(nextTargets);
       return nextTargets[smartAttack];
-    } 
+    }
 
     return this.random();
   },
 
+  randomize(array) {
+    return Math.floor(Math.random() * array.length);
+  },
 
   validateCells(list) {
     const newList = [];
@@ -96,8 +97,5 @@ export const computerAttack = (opponentBoard) => ({
     }
 
     return newList;
-
-    // arrumar um jeito de tirar as celulas que não estejam disponiveis
-    // no this.availableCells
-  }
+  },
 });
