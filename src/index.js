@@ -1,21 +1,13 @@
-import { domBoard } from "./domboard.js";
 import {game} from './gameloop.js';
-import { gameBoard } from "./createboard.js";
-import './styles.css'
+import "./styles.css";
 
 
+const start = game();
+start.createGameLoop();
 
-const humanBoard = gameBoard("human")
-humanBoard.createBoardCoordinates();
-const computerBoard = gameBoard("computer")
-computerBoard.createBoardCoordinates();
-const humanDOMBoard = domBoard("human", humanBoard);
-const computerDOMBoard  = domBoard("computer", computerBoard);
-
-const gameStart = game(humanBoard, computerBoard, humanDOMBoard, computerDOMBoard);
-gameStart.createGameLoop();
-
-document.querySelector(".computer").addEventListener("click", (e) => {
-  if (computerDOMBoard.checkIfValid(e) !== true) return;
-  gameStart.computerRound();
-})
+const computerBoard = document.querySelector(".computer");
+computerBoard.addEventListener("click",(e) => {
+  if (e.target.classList.contains("attacked")) return;
+  start.computerRound();
+  e.target.classList.add("attacked");
+});

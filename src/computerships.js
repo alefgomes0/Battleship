@@ -124,7 +124,7 @@ export const placeComputerShips = (ships, board) => ({
       if (repeatedNumber === true) continue;
 
       for (const n of provisoryPlacement) this.shipIndexes.push(n);
-      console.log(provisoryPlacement, this.myShips);
+
       board.updateBoard(this.myShips[0].type, provisoryPlacement);
       const replacementShips = this.myShips;
       replacementShips.splice(0, 1);
@@ -154,7 +154,6 @@ export const placeComputerShips = (ships, board) => ({
 
       for (const n of provisoryPlacement) this.shipIndexes.push(n);
 
-      console.log(provisoryPlacement, this.myShips);
       board.updateBoard(this.myShips[0].type, provisoryPlacement);
       const replacementShips = this.myShips;
       replacementShips.splice(0, 1);

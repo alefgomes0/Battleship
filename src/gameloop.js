@@ -1,9 +1,11 @@
+import { domBoard } from "./domboard.js";
+import { gameBoard } from "./createboard.js";
 import { player } from "./player.js";
 import { shipSquad } from "./squad.js";
 import { placeComputerShips } from "./computerships.js";
 import { computerAttack } from "./computerattack.js";
 
-export const game = (humanBoard, computerBoard, humanDOMBoard, computerDOMBoard) => ({
+export const game = () => ({
   humanPlayer: null,
   computerPlayer: null,
   humanBoard: null,
@@ -15,10 +17,16 @@ export const game = (humanBoard, computerBoard, humanDOMBoard, computerDOMBoard)
   createGameLoop() {
     this.humanPlayer = player();
     this.computerPlayer = player();
-    this.humanBoard = humanBoard;
-    this.computerBoard = computerBoard;
-    this.humanDOMBoard = humanDOMBoard;
-    this.computerDOMBoard = computerDOMBoard;
+    this.humanBoard = gameBoard(shipSquad().create());
+    this.humanBoard.createBoardCoordinates();
+    this.computerBoard = gameBoard(shipSquad().create());
+    this.computerBoard.createBoardCoordinates();
+    this.humanDOMBoard = domBoard("human", this.humanBoard, this.humanPlayer);
+    this.computerDOMBoard = domBoard(
+      "computer",
+      this.computerBoard,
+      this.computerPlayer
+    );
     this.computerPlay = computerAttack(this.humanBoard);
     this.computerPlay.checkAvailableCells();
 
@@ -33,28 +41,27 @@ export const game = (humanBoard, computerBoard, humanDOMBoard, computerDOMBoard)
   },
 
   startGame() {
-    this.humanPlayer.isTurn = true;
+    this.humanPlayer.isTurn = false;
     this.computerPlayer.isComputer = true;
-    const computerSquad = shipSquad().create();
-    const computerShips = placeComputerShips(computerSquad, this.computerBoard);
+    const computerShips = placeComputerShips(
+      shipSquad().create(),
+      this.computerBoard
+    );
 
     computerShips.placeShips();
     this.humanDOMBoard.displayBoard();
     this.computerDOMBoard.displayBoard();
-  },
-
-  humanRound() {
     this.computerDOMBoard.placeEventListener(".computer");
+    this.humanDOMBoard.placeEventListener(".human");
   },
 
   computerRound() {
-    const cellNumber = this.computerPlay.random();
+    this.humanPlayer.isTurn = true;
+    const cellNumber = this.computerPlay.attack();
     const attackedCell = document.querySelector(
       `.human > .row > [data-index="${cellNumber}"]`
     );
-    this.humanDOMBoard.placeEventListener(".human");
     attackedCell.click();
-    this.humanPlayer.isTurn = true;
-    this.humanRound();
+    this.humanPlayer.isTurn = false;
   },
 });

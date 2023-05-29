@@ -17,14 +17,4 @@ export const player = () => ({
   set isComputer(value) {
     this._isComputer = value;
   },
-
-  computerPlay(opponenBoard) {
-    if (this.isComputer === false) return;
-    const availableCells = opponenBoard.filter(
-      (cell) => cell.attacked === false
-    );
-    const randomIndex = Math.floor(Math.random() * availableCells.length);
-    const randomNumber = availableCells[randomIndex];
-    console.log(randomNumber);
-  },
 });

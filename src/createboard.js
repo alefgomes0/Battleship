@@ -1,4 +1,17 @@
-export const gameBoard = () => ({
+import { ship } from "./ship";
+
+export const gameBoard = (playerShips) => ({
+  _ships: playerShips,
+
+  get ships() {
+    return this._ships;
+  },
+
+  set ships(array) {
+    this._ships = array;
+  },
+
+
   createBoardCoordinates() {
     const coordinates = [];
     for (let i = 0; i < 10; i++) {
@@ -35,12 +48,23 @@ export const gameBoard = () => ({
     this._board[position].attacked = true;
     if (this._board[position].ship === "none") return "miss";
 
+    const shipName = this._board[position].ship;
+    this.attackShip(shipName);
     return "hit";
   },
 
+
+  attackShip(shipName) {
+    const updatedShips = this.ships;
+    const shipIndex = updatedShips.findIndex((ship) => ship.type === shipName)
+    updatedShips[shipIndex].hit();
+    this.ships = updatedShips;
+  },
+
   checkIfAllSunk() {
-    const myBoard = this._board.filter((cell) => cell.stillAlive === true);
-    if (myBoard.length === 0) return true;
+    const myShips = this.ships.filter((ship) => ship.isSunk() === false) 
+    if (myShips.length === 0) return true;
     return false;
   },
+
 });

@@ -1,6 +1,6 @@
 import { shipSquad } from "./squad.js";
 
-export const domBoard = (playerName, someBoard, vsf) => ({
+export const domBoard = (playerName, someBoard, player) => ({
   _squad: shipSquad().create(),
 
   get squad() {
@@ -108,7 +108,7 @@ export const domBoard = (playerName, someBoard, vsf) => ({
         this.handleCellMouseOver(e.target);
     });
 
-    placementScreen.addEventListener("mouseout", this.handleMouseOut);
+    placementScreen.addEventListener("mouseout", this.handleCellMouseOut);
 
     placementScreen.addEventListener("click", (e) => {
       if (e.target.classList.contains("cell"))
@@ -119,11 +119,14 @@ export const domBoard = (playerName, someBoard, vsf) => ({
   placeEventListener(playerName) {
     const board = document.querySelector(playerName);
     board.addEventListener("click", (e) => {
-      const attackedPosition = e.target.getAttribute("data-index");
+      const attackedPosition = Number(e.target.getAttribute("data-index"));
       if (!e.target.classList.contains("cell")) return;
       if (someBoard.board[attackedPosition].attacked === true) return;
+      if (player.isTurn === false && playerName === ".human") return;
       const attackStatus = someBoard.receiveAttack(attackedPosition);
+
       this.handleAttack(attackedPosition, attackStatus);
+      if (someBoard.checkIfAllSunk() === true) this.finishGame(); 
     });
   },
 
@@ -169,7 +172,6 @@ export const domBoard = (playerName, someBoard, vsf) => ({
     placedIndexes.push(currentIndex);
     cell.classList.add("highlighted");
 
-    // Provavelmente vou refazer essa parte do programa. Muita repetição
 
     if (currentShip.direction === "horizontal") {
       for (let i = 1; i < currentShip.size; i++) {
@@ -216,7 +218,7 @@ export const domBoard = (playerName, someBoard, vsf) => ({
     }
   },
 
-  handleMouseOut() {
+  handleCellMouseOut() {
     const cells = document.querySelectorAll(".highlighted");
     cells.forEach((cell) => cell.classList.remove("highlighted"));
   },
@@ -245,4 +247,31 @@ export const domBoard = (playerName, someBoard, vsf) => ({
     const boards = document.querySelector(".boards");
     boards.style.display = "grid";
   },
+
+  finishGame() {
+    const finishScreen = document.createElement("div");
+    finishScreen.classList.add("game-over");
+    document.querySelector("body").appendChild(finishScreen);
+    document.querySelector(".page-wrapper").classList.add("blurring");
+    const phrase = document.createElement("h3");
+    finishScreen.appendChild(phrase);
+
+    if (playerName === "human") {
+      phrase.textContent = "You lost the game!";
+    }
+    else phrase.textContent = "You won the game!";
+    
+    const closeWindow = document.createElement("button");
+    closeWindow.classList.add("close-window");
+    closeWindow.textContent = "Close";
+    finishScreen.appendChild(closeWindow);
+    this.closeButton();
+  },
+
+  closeButton() {
+    document.querySelector(".close-window").addEventListener("click", () => {
+      document.querySelector(".page-wrapper").classList.remove("blurring");
+      document.querySelector(".game-over").remove();
+    });
+  }
 });
