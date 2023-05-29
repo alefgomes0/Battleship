@@ -273,7 +273,7 @@ h1 {
 }
 
 .close-window:hover {
-  background-color: #e81212;
+  background-color: #d32a2a;
   color: #fff;
 }
 
@@ -284,13 +284,13 @@ h1 {
 
 @media(max-width: 900px) {
   .board {
-    width: 250px;
-    height: 250px;
+    width: 320px;
+    height: 320px;
   }
 
   .cell {
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
   }
 
   .cell.hit::after,
@@ -338,12 +338,12 @@ h1 {
   }
 
   .board {
-    width: 200px;
+    width: 400px;
     height: 200px;
   }
 
   .cell {
-    width: 20px;
+    width: 40px;
     height: 20px;
   }
 
@@ -352,4 +352,16 @@ h1 {
     font-size: 12px;
   }
   
+}
+
+@media(max-width: 500px) {
+  .board {
+    width: 300px;
+    height: 200px;
+  }
+
+  .cell {
+    width: 30px;
+    height: 20px;
+  }
 }

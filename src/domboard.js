@@ -251,9 +251,8 @@ export const domBoard = (playerName, someBoard, player) => ({
     if (playerName === "human") {
       phrase.textContent = "You lost the game!";
     }
-
-    phrase.textContent = "You won the game!";
-
+    else phrase.textContent = "You won the game!";
+    
     const closeWindow = document.createElement("button");
     closeWindow.classList.add("close-window");
     closeWindow.textContent = "Close";

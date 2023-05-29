@@ -3,9 +3,9 @@ export const computerAttack = (opponentBoard) => ({
     const notAttacked = [];
     let counter = 0;
     for (const s of opponentBoard.board) {
-      counter++;
       if (s.attacked === true) continue;
       notAttacked.push(counter);
+      counter++;
     }
 
     this._availableCells = notAttacked;
@@ -48,7 +48,7 @@ export const computerAttack = (opponentBoard) => ({
 
     this.checkHit(attackedCell);
     const cells = this.availableCells;
-    const index = cells.findIndex((cell) => cell == attackedCell);
+    const index = cells.findIndex((cell) => cell === attackedCell);
     cells.splice(index, 1);
     this.availableCells = cells;
     return attackedCell;
@@ -69,7 +69,7 @@ export const computerAttack = (opponentBoard) => ({
   random() {
     const cells = this.availableCells;
     const index = Math.floor(Math.random() * cells.length);
-    return index;
+    return cells[index];
   },
 
   smart() {
