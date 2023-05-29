@@ -1,6 +1,6 @@
 import { shipSquad } from "./squad.js";
 
-export const domBoard = (playerName, someBoard) => ({
+export const domBoard = (playerName, someBoard, player) => ({
   _squad: shipSquad().create(),
 
   get squad() {
@@ -122,6 +122,7 @@ export const domBoard = (playerName, someBoard) => ({
       const attackedPosition = Number(e.target.getAttribute("data-index"));
       if (!e.target.classList.contains("cell")) return;
       if (someBoard.board[attackedPosition].attacked === true) return;
+      if (player.isTurn === false && playerName === ".human") return;
       const attackStatus = someBoard.receiveAttack(attackedPosition);
       
       this.handleAttack(attackedPosition, attackStatus);

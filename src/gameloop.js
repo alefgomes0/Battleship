@@ -21,14 +21,13 @@ export const game = () => ({
     this.humanBoard.createBoardCoordinates();
     this.computerBoard = gameBoard(shipSquad().create());
     this.computerBoard.createBoardCoordinates();
-    this.humanDOMBoard = domBoard("human", this.humanBoard);
-    this.computerDOMBoard = domBoard("computer", this.computerBoard);
+    this.humanDOMBoard = domBoard("human", this.humanBoard, this.humanPlayer);
+    this.computerDOMBoard = domBoard("computer", this.computerBoard, this.computerPlayer);
     this.computerPlay = computerAttack(this.humanBoard);
     this.computerPlay.checkAvailableCells();
 
     this.startPlacementPhase();
     this.startGame();
-    this.humanRound();
   },
 
   startPlacementPhase() {
@@ -38,28 +37,25 @@ export const game = () => ({
   },
 
   startGame() {
-    this.humanPlayer.isTurn = true;
+    this.humanPlayer.isTurn = false;
     this.computerPlayer.isComputer = true;
     const computerShips = placeComputerShips(shipSquad().create(), this.computerBoard);
 
     computerShips.placeShips();
     this.humanDOMBoard.displayBoard();
     this.computerDOMBoard.displayBoard();
+    this.computerDOMBoard.placeEventListener(".computer");
+    this.humanDOMBoard.placeEventListener(".human");
   },
 
-  humanRound() {
-    this.computerDOMBoard.placeEventListener(".computer");
-    this.humanPlayer.isTurn = false;
-  },
 
   computerRound() {
+    this.humanPlayer.isTurn = true;
     const cellNumber = this.computerPlay.random();
     const attackedCell = document.querySelector(
       `.human > .row > [data-index="${cellNumber}"]`
     );
-    this.humanDOMBoard.placeEventListener(".human");
     attackedCell.click();
-    this.humanPlayer.isTurn = true;
-    this.humanRound();
+    this.humanPlayer.isTurn = false;
   },
 });
