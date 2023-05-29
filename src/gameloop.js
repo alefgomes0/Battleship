@@ -51,7 +51,7 @@ export const game = () => ({
 
   computerRound() {
     this.humanPlayer.isTurn = true;
-    const cellNumber = this.computerPlay.random();
+    const cellNumber = this.computerPlay.attack();
     const attackedCell = document.querySelector(
       `.human > .row > [data-index="${cellNumber}"]`
     );

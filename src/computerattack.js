@@ -21,91 +21,83 @@ export const computerAttack = (opponentBoard) => ({
 
   recentHit: false,
 
-  cellsToTry: [
-    {"direction":"left", "index":"none", "hitLast":true},
-    {"direction":"right", "index":"none", "hitLast":true},
-    {"direction":"up", "index":"none", "hitLast":true},
-    {"direction":"down", "index":"none", "hitLast":true}
-  ],
+  recentHitIndex: null,
 
-  roundsWithoutHits: 99,
+  roundsWithoutHits: 0,
+
+  cellsToAttack: [],
+
+  checkMiss() {
+    this.roundsWithoutHits++;
+    if (this.roundsWithoutHits >= 4) this.recentHit = false;
+  },
 
   findIndex(nextGuesses) {
     for (let i = 0; i < nextGuesses.length; i++) {
-      let cell = this.availableCells.filter((cell) => cell === nextGuesses[i]);
+      const cell = this.availableCells.filter((cell) => cell === nextGuesses[i]);
       if (cell !== -1) return cell;
     }
   },
 
   attack() {
-    let index;
+    let attackedCell;
     if (this.recentHit === true) {
-      index = this.smart()
+      attackedCell = this.smart()
     }
+    else attackedCell = this.random();
 
-    index = this.random();
-    return index;
+    this.checkHit(attackedCell);
+    const cells = this.availableCells;
+    const index = cells.findIndex((cell) => cell == attackedCell);
+    cells.splice(index, 1);
+    this.availableCells = cells;
+    return attackedCell;
+  },
+
+  checkHit(someIndex) {
+    if (opponentBoard.board[someIndex].ship === "none") {
+      this.recentHit = false;
+      this.checkMiss();
+    }
+    else {
+      this.recentHit = true;
+      this.recentHitIndex = someIndex;
+      this.roundsWithoutHits = 0;
+    } 
   },
 
   random() {
     const cells = this.availableCells;
     const index = Math.floor(Math.random() * cells.length);
-    cells.splice(index, 1);
-    this.availableCells = cells;
     return index;
   },
 
-/*   smart(index) {
-    index = Number(index);
-    if (this.recentHit === false && opponentBoard.board[index].ship !== "none") {
-      this.recentHit = true;
-      this.roundsWithoutHits = 0;
+  smart() {
+    const index = this.recentHitIndex;
 
-      const next = this.defineNextTarget(index);
-      this.cellsToTry = next;
-    }
+    const testCells = [index - 1, index + 1, index - 10, index + 10];
+    const nextTargets = this.validateCells(testCells);
 
-    else if (this.recentHit === true && opponentBoard.board[index].ship !== "none") {
-      let testCells = this.cellsToTry
-      testCells[0] = testCells[0] - 1;
-      this.cellsToTry = testCells;
-      console.log(this.cellsToTry);
-    }
+    if (nextTargets.length > 0) {
+      const smartAttack = Math.floor(Math.random() * nextTargets.length);
+      return nextTargets[smartAttack];
+    } 
 
-    if (this.recentHit === true && opponentBoard.board[index].ship === "none") {
-      const updatedList = this.cellsToTry;
-      updatedList.splice(0, 1);
-      console.log("AAAAA", updatedList);
-
-      this.roundsWithoutHits++;
-    }
+    return this.random();
   },
 
-  defineNextTarget(cellIndex) {
-    let testCells = [cellIndex - 1, cellIndex + 1, cellIndex - 10, cellIndex + 10];
-    testCells = this.validateCells(testCells);
-
-    let nextTargets = this.cellsToTry;
-    let counter = 0;
-    for (const i of testCells) {
-      nextTargets[counter].index = i;
-      counter++;
-    }
-
-    this.cellsToTry = nextTargets;
-  },
 
   validateCells(list) {
     const newList = [];
     for (const i of list) {
       if (i < 0 || i > 99) continue;
+      if (opponentBoard.board[i].attacked === true) continue;
       newList.push(i);
     }
 
-    console.log(newList);
     return newList;
 
     // arrumar um jeito de tirar as celulas que não estejam disponiveis
     // no this.availableCells
-  } */
+  }
 });
